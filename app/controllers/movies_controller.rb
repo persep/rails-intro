@@ -6,18 +6,18 @@ class MoviesController < ApplicationController
     # will render app/views/movies/show.<extension> by default
   end
 
-  def index
+  def index 
+    @all_ratings = Movie.all_ratings
+    @selected_ratings = params[:ratings].nil? ? Movie.all_ratings : params[:ratings].keys
     if params[:sort] == "title"
-      @movies = Movie.order(:title)
+      @movies = Movie.order(:title).where('rating IN (?)', @selected_ratings).all
       @highlight = "title"
     elsif params[:sort] == "date"
-      @movies = Movie.order(:release_date)
+      @movies = Movie.order(:release_date).where('rating IN (?)', @selected_ratings).all
       @highlight = "date"
     else
-      @movies = Movie.all
+      @movies = Movie.where('rating IN (?)', @selected_ratings).all
     end
-    @all_ratings = ['G','PG','PG-13','R']
-
   end
 
   def new
