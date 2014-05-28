@@ -10,13 +10,14 @@ class MoviesController < ApplicationController
     @all_ratings = Movie.all_ratings
     @selected_ratings = params[:ratings].nil? ? Movie.all_ratings : params[:ratings].keys
     if params[:sort] == "title"
-      @movies = Movie.order(:title).where('rating IN (?)', @selected_ratings).all
+      @movies = Movie.order(:title).where(rating: @selected_ratings).all
       @highlight = "title"
     elsif params[:sort] == "date"
-      @movies = Movie.order(:release_date).where('rating IN (?)', @selected_ratings).all
+      @movies = Movie.order(:release_date).where(rating: @selected_ratings).all
       @highlight = "date"
     else
-      @movies = Movie.where('rating IN (?)', @selected_ratings).all
+      #@movies = Movie.where('rating IN (?)', @selected_ratings).all
+      @movies = Movie.where(rating: @selected_ratings).all
     end
   end
 
