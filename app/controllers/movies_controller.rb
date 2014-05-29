@@ -17,7 +17,12 @@ class MoviesController < ApplicationController
     if params[:ratings].nil? and session[:ratings].nil?
       @selected_ratings = Movie.all_ratings
     else
-      @selected_ratings = params[:ratings].nil? ? session[:ratings] : params[:ratings].keys
+      if !params[:ratings].nil? and params[:ratings].class == Array
+        param = params[:ratings]
+      elsif !params[:ratings].nil?
+        param = params[:ratings].keys
+      end
+      @selected_ratings = params[:ratings].nil? ? session[:ratings] : param
     end
 
 
@@ -25,8 +30,7 @@ class MoviesController < ApplicationController
     if params[:sort] != session[:sort] or params[:ratings] != session[:ratings]
       session[:sort] = sort
       session[:ratings] = @selected_ratings
-      flash.keep
-      #redirect_to :sort => sort, :ratings => @selected_ratings and return
+      redirect_to :sort => sort, :ratings => @selected_ratings and return
     end
 
     if sort == "title"
