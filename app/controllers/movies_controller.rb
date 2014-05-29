@@ -7,7 +7,8 @@ class MoviesController < ApplicationController
   end
 
   def index 
-    sort = params[:sort] || session[:sort]
+    # params is a HASH
+    sort = params[:sort] || session[:sort]  
 
     @all_ratings = Movie.all_ratings
     
@@ -30,6 +31,8 @@ class MoviesController < ApplicationController
     if params[:sort] != session[:sort] or params[:ratings] != session[:ratings]
       session[:sort] = sort
       session[:ratings] = @selected_ratings
+      # in redirect_to even if we pass an array as an option when the url is redirecte
+      # it will in params as a hash
       redirect_to :sort => sort, :ratings => @selected_ratings and return
     end
 
